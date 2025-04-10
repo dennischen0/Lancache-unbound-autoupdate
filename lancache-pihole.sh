@@ -27,7 +27,7 @@ cd /home/$(logname)
 git clone https://github.com//uklans/cache-domains > /dev/null 2>&1
 
 #Get host ip address
-Hostip="""$(hostname -I | sed -r 's/[^], :[]+/"&"/g')"""
+Hostip="""$(hostname -I | awk '{print $1}' | sed -r 's/[^], :[]+/"&"/g')"""
 
 #Setting up config.json file
 {
