@@ -32,6 +32,7 @@ Hostip="""$(hostname -I | awk '{print $1}' | sed -r 's/[^], :[]+/"&"/g')"""
 #Setting up config.json file
 {
 echo '{'
+echo '  "combined_output": true,'
 echo '  "ips": {'
 echo '          "generic":      '$Hostip
 echo '  },'
@@ -52,8 +53,9 @@ chmod +x lancache-dns-updates.sh
 
 echo "   Creating crontab job... "
 
-          #### Adding the script to a cron job
-(crontab -u $(whoami) -l; echo "30 3 * * * /bin/bash /root/lancache-dns-updates.sh" ) | crontab -u $(whoami) -
+          # Adding the script to a cron job if it doesn't already exist
+CRON_JOB="30 3 * * * /bin/bash /root/lancache-dns-updates.sh"
+(crontab -u $(whoami) -l | grep -qF "$CRON_JOB") || (crontab -u $(whoami) -l; echo "$CRON_JOB") | crontab -u $(whoami) -
 
 sudo service cron reload > /dev/null 2>&1
 
