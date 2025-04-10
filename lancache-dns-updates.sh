@@ -6,7 +6,7 @@ SYSTEMUSER=$(logname)
 # Directory the git repository is synced to
 GITSYNCDIR=/home/$SYSTEMUSER/cache-domains
 # Your personalized config file from "Setting up our config.json file" step
-DNSMASQCONFIG=/home/$SYSTEMUSER/config.json
+CONFIG=/home/$SYSTEMUSER/config.json
 
 # Create a new, random temp directory and make sure it was created, else exit
 TEMPDIR=$(mktemp -d)
@@ -23,26 +23,24 @@ cd $GITSYNCDIR && \
 # Copy the .txt files and .json file to the temp directory
 cp `find $GITSYNCDIR -name "*.txt" -o -name cache_domains.json` $TEMPDIR
 
-# Copy the create-dnsmasq.sh script to our temp directory
+# Copy the create-unbound.sh script to our temp directory
 mkdir $TEMPDIR/scripts/ && \
-  cp $GITSYNCDIR/scripts/create-dnsmasq.sh $TEMPDIR/scripts/ && \
-  chmod +x $TEMPDIR/scripts/create-dnsmasq.sh
+  cp $GITSYNCDIR/scripts/create-unbound.sh $TEMPDIR/scripts/ && \
+  chmod +x $TEMPDIR/scripts/create-unbound.sh
 
 # Copy the config over
-cp $DNSMASQCONFIG $TEMPDIR/scripts/
+cp $CONFIG $TEMPDIR/scripts/
 
-# Generate the dnsmasq files with the script
+# Generate the unbound files with the script
 cd $TEMPDIR/scripts/ && \
-  bash ./create-dnsmasq.sh > /dev/null 2>&1
+  bash ./create-unbound.sh > /dev/null 2>&1
 
-# Copy the dnsmasq files
-cp -r $TEMPDIR/scripts/output/dnsmasq/*.conf /etc/dnsmasq.d/
+# Copy the unbound files
+cp -r $TEMPDIR/scripts/output/unbound/*.conf /etc/unbound/unbound.conf.d/
 
-# Restart pihole-FTL or docker
-if systemctl is-active --quiet pihole-FTL ; then
-  sudo service pihole-FTL restart
-elif sudo docker ps -a | grep -o "pihole" > /dev/null 2>&1 ; then
-  sudo docker restart pihole > /dev/null 2>&1
+# Restart unbound
+if systemctl is-active --quiet unbound ; then
+  sudo service unbound restart
 fi
 
 # Delete the temp directory to clean up files
