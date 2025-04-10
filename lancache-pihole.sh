@@ -39,7 +39,7 @@ echo '  "cache_domains": {'
 echo '          "default":      "generic"'
 echo '  }'
 echo '}'
-} >> config.json
+} > config.json
 
 echo "   Generating cache-domains files... "
 
