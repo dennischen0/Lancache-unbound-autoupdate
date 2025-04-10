@@ -3,8 +3,8 @@
 Straight to the point - I made a script of the following guide ([link](https://oct8l.gitlab.io/posts/2021/297/scripting-lancache-dns-updates-with-pi-hole/)) on how to set up Pihole to forward DNS request to Lancache. This will allow you to continue to use the Pihole web gui with the benefits of Lancache. 
 
 ## Commands to use this script: 
-    git clone https://github.com/Maddcow/Lancache-Pihole Lancache-Pihole
-    cd Lancache-Pihole
+    git clone https://github.com/dennischen0/Lancache-unbound-autoupdate Lancache-unbound-autoupdate
+    cd Lancache-unbound-autoupdate
     chmod +x lancache-pihole.sh
     sudo ./lancache-pihole.sh
 
